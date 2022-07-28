@@ -44,25 +44,23 @@
     
 CG3Y    从服务器下载文件
 CG3Z    从本地上传文件
-AL11    查看服务器的路径内容
-FILE    绝对路径变成相对路径
+AL11    查看服务器的路径和内容
+FILE    把物理路径变成伦理路径  相当于给一个长路径起别名
 
 バッチインプット    標準テーブルデータ登録、変更
-    SHDB    录屏
+    T-cd SHDB   标准名BDCレコーダー 作用 录屏生成batch代码
 
     データ移行
     CALL TRANSACTION 'AS01' 
-        USING GT_BDC            "入力        
+        USING GT_BDC            "录屏后生成的表就是该表        
         MODE 'N'
-        MESSAGES INTO GT_MSG.   "出力
+        MESSAGES INTO GT_MSG.   "把信息插入这个信息表
     
     1. マスタ移行
     2. トランザクション移行 （業務データ）
 
-    練習　FI01 銀行登録
-         AS01 資産登録
+    練習　AS01 固定資産登録
 
-SHDB 录屏
 做过什么样的batchinput 就是问T-cd 
 
 作业：班级学生表不用结合的方式取数据

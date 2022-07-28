@@ -1,4 +1,11 @@
-
+各个模块的介绍          
+	会计系
+          FI 财务管理
+          CO 管理会计
+	ロジ系
+          SD 贩卖管理
+          MM 在库/购买管理
+          PP 生产/计划管理
 
 数据类型                        
      C 字符串                      
@@ -59,8 +66,8 @@
 
           変数定義                     
           DATA: GDF_ID TYPE CHAR3,          "変数"          
-               GDS_STU TYPE ty_stu,          "构造　コンストラクター？"          
-               GDT_STU TYPE TABLE OF ty_stu.          "内表    内部テーブル？"          
+               GDW_STU TYPE ty_stu,          "构造"          
+               GDT_STU TYPE TABLE OF ty_stu.          "内表"          
                                              
           定数定義（数字、英字、符号）
           CONSTANTS:GCF_PI TYPE P DECIMALS 5 VALUE '3.14159'
@@ -72,9 +79,9 @@
           FIELD-SYMBOLS: <FS_STU> TYPE TY_STU.
           
      選択画面
-          PARAMETERS:    P_ID TYPE CHAR3.         头文字P代表画面
-          SELECT-OPTIONS:S_ID FOR GDF_ID          用FOR后面放一个变量     除了ラジオボタン、
-                                                                        チェックボックス外基本都可以
+          PARAMETERS:    P_ID TYPE CHAR3.         "头文字P代表画面
+          SELECT-OPTIONS:S_ID FOR GDF_ID          "用FOR后面放一个变量     除了ラジオボタン、
+                                                                        "チェックボックス外基本都可以
 
      初期处理
           在选择画面还没出来之前做的初期处理
@@ -164,7 +171,4 @@
 
 
 
-
-英数键双击变大写
-中文换到control键
 
