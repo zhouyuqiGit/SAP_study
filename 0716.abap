@@ -11,7 +11,7 @@ DB结合
     WHERE A~ID IN S_ID.         "在S/4环境 要写成@S_ID
 
 内表结合
-    IF GT_STU[] is not initial.         "[]はテーブルヘッダの意味
+    IF GT_STU[] is not initial.         "如果该内表不为空[]はテーブルヘッダの意味
         SELECT XXX
         FROM ZTCLASS
             FOR ALL ENTRIES IN GT_STU   "内部テーブル
@@ -123,6 +123,3 @@ DB结合
 
     GF_STR = 'AA' && 'BB'.          "r3用不了
 
-    
-* つづりをチェックしてください  構文エラー
-* ディクョナリでテーブル　射影ビューまたはデータベースビュー として定義されていません  テーブルが有効化されてないかも

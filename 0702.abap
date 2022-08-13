@@ -78,7 +78,7 @@
           指针定義
           FIELD-SYMBOLS: <FS_STU> TYPE TY_STU.
           
-     選択画面
+     選択画面                                      "选择画面项目设定テキスト：ジャンプ–テキストエレメント−選択テキスト
           PARAMETERS:    P_ID TYPE CHAR3.         "头文字P代表画面
           SELECT-OPTIONS:S_ID FOR GDF_ID          "用FOR后面放一个变量     除了ラジオボタン、
                                                                         "チェックボックス外基本都可以

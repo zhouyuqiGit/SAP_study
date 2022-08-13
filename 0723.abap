@@ -11,7 +11,7 @@
     ctrl+y 可以自由选中
 
 文件的上传（两种方式）
-    FUNCTION 'GUI_UPLOWD'.
+    FUNCTION 'GUI_UPLOAD'.
 
     OPEN DATASET P_FNAME        "打开文件
         FOR INPUT.
@@ -27,14 +27,15 @@
 字符串拆分
     SPLIT GF_STR '001,趙,99.5,7'
         AT ','
-        INTO    GW_STU-ID        .   "一定要准备好接受变量的数量和类型
+        INTO    GW_STU-ID           "一定要准备好接受变量的数量和类型
                 GW_STU-NAME
                 GW_STU_SCORE.
         "或↓
         INTO TABLE GT_STR.          "直接插入一个内表里循环出来
             LOOP AT GT_STR INTO GW_STR.
                 <FS> = GW_STR.      "把构造放在指针里
-                ASSIGN COMPONENT NAME OF STRUCTURE REC TO <FS>.
+                ASSIGN COMPONENT 'ID' OF STRUCTURE GW_STU TO <FS>.      "？？？这里的赋值方向究竟是谁给谁
+                ASSIGN COMPONENT 'NAME' OF STRUCTURE GW_STU TO <FS>.
             ENDLOOP.
 
     拆分日期        "也可以拆分字符串
@@ -52,9 +53,9 @@ FILE    把物理路径变成伦理路径  相当于给一个长路径起别名
 
     データ移行
     CALL TRANSACTION 'AS01' 
-        USING GT_BDC            "录屏后生成的表就是该表        
-        MODE 'N'
-        MESSAGES INTO GT_MSG.   "把信息插入这个信息表
+        USING GT_BDC            "录屏后生成的表就是该表
+        MODE 'N'                "???
+        MESSAGES INTO GT_MSG.   "把执行结果的信息插入这个信息表
     
     1. マスタ移行
     2. トランザクション移行 （業務データ）
@@ -62,6 +63,8 @@ FILE    把物理路径变成伦理路径  相当于给一个长路径起别名
     練習　AS01 固定資産登録
 
 做过什么样的batchinput 就是问T-cd 
+
+構文チェック T-cd SLIN
 
 作业：班级学生表不用结合的方式取数据
 READ TABLE 从内表里取一条数据

@@ -1,0 +1,4 @@
+* つづりをチェックしてください  構文エラー
+* ディクョナリでテーブル　射影ビューまたはデータベースビュー として定義されていません  テーブルが有効化されてないかも
+you cannot use an internal table as a work area     很可能是into table gdt_ztclass的table没写
+转换后的数据过长 很可能是数字转文字的时候没转好

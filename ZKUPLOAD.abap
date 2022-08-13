@@ -64,13 +64,13 @@ FORM UPLOAD_DATA.
 ENDFORM.                    "GET_DATA
 
 *&--------------------------------------------------------------------*
-*&      Form  OUT_DATA
+*&      Form  EDIT_DATA
 *&--------------------------------------------------------------------*
 *       text
 *---------------------------------------------------------------------*
 FORM EDIT_DATA.
 
-DATA: lf_char_id  TYPE char3,
+  DATA: lf_char_id  TYPE char3,
        LDF_ID TYPE CHAR100,
         lf_char_score TYPE char6.
   LOOP AT GDT_FILE INTO GDW_FILE.   "循环String类型的表到构造
@@ -97,13 +97,18 @@ DATA: lf_char_id  TYPE char3,
        SEPARATED  BY ','.
            LDF_ID .
         CONTINUE.
-     ELSE.                        "如果不存在 则把构造添加进内表
+    ELSE.                        "如果不存在 则把构造添加进内表
        APPEND GDW_ZTSTU TO GDT_ZTSTU.
-      ENDIF.
+    ENDIF.
   ENDLOOP.
   WRITE:/ LDF_ID.
 ENDFORM.                    "EDIT_DATA
 
+*&--------------------------------------------------------------------*
+*&      Form  INS_DATA
+*&--------------------------------------------------------------------*
+*       text
+*---------------------------------------------------------------------*
 FORM INS_DATA.
    INSERT (P_TBLID) FROM TABLE GDT_ZTSTU  "把内表插入DB表
      ACCEPTING DUPLICATE KEYS .           "如果插入失败也不中断处理
