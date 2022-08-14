@@ -19,7 +19,7 @@ TYPES: BEGIN OF ty_asset,
 
 DATA: gdt_asset TYPE TABLE OF ty_asset, "固定資産データ == D:bdc.txt
       gdw_asset TYPE ty_asset,
-      gdt_bdc TYPE bdcdata_tab,
+      gdt_bdc TYPE bdcdata,
       gdw_bdc TYPE bdcdata,
       gdt_msg TYPE TABLE OF bdcmsgcoll,   "BDC信息收集表 可以在SE11查到
       gdw_msg TYPE bdcmsgcoll,
@@ -49,9 +49,10 @@ END-OF-SELECTION.
 *       text
 *---------------------------------------------------------------------*
 FORM get_data.
-  DATA: ldf_fname TYPE string,
-        ldf_msg TYPE char50.
+  DATA: ldf_fname TYPE string.
+  
   ldf_fname = p_fname.
+  
   CALL FUNCTION 'GUI_UPLOAD'
     EXPORTING
       filename                = ldf_fname
@@ -119,7 +120,7 @@ ENDFORM.                    "edit_data
 FORM create_data.
   LOOP AT gdt_asset INTO gdw_asset.
     DATA: lf_p_menge  TYPE p,
-    lf_c_menge TYPE c.
+          lf_c_menge TYPE c.
 
     CLEAR: gdw_bdc.
     gdw_bdc-program = space.
