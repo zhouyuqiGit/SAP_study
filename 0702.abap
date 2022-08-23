@@ -1,7 +1,7 @@
 各个模块的介绍          
 	会计系
-          FI 财务管理
-          CO 管理会计
+          FI 财务管理　对外公开
+          CO 管理会计  不对外公开
 	ロジ系
           SD 贩卖管理
           MM 在库/购买管理
@@ -54,20 +54,20 @@
                               T-CODE 快捷码         
 
 制作帐票万变不离其宗的7步骤                        
-     命名 REPORT   ZKT7STEPS                     
-     定义 
+     1.命名 REPORT   ZKT7STEPS                "第一个字母是A～X的肯定是标准程序 Y,Z是アダン程序
+     2.定义 
           該当帳票のタイプ定義                     
           TYPES:    BEGIN OF ty_stu,                    
-                         ID TYPE CHAR3,           "データエレメント = データタイプ＋長さ＋名前"            
+                         ID TYPE CHAR3,      "データエレメント = データタイプ＋長さ＋名前"            
                          NAME TYPE CHAR30,                    
                          CLASS TYPE C,                    
                          BIR TYPE D,                    
                     END OF ty_stu.                    
 
           変数定義                     
-          DATA: GDF_ID TYPE CHAR3,          "変数"          
-               GDW_STU TYPE ty_stu,          "构造"          
-               GDT_STU TYPE TABLE OF ty_stu.          "内表"          
+          DATA: GDF_ID TYPE CHAR3,            "変数"          
+               GDW_STU TYPE ty_stu,           "构造"          
+               GDT_STU TYPE TABLE OF ty_stu.  "内表"          
                                              
           定数定義（数字、英字、符号）
           CONSTANTS:GCF_PI TYPE P DECIMALS 5 VALUE '3.14159'
@@ -78,12 +78,12 @@
           指针定義
           FIELD-SYMBOLS: <FS_STU> TYPE TY_STU.
           
-     選択画面                                      "选择画面项目设定テキスト：ジャンプ–テキストエレメント−選択テキスト
-          PARAMETERS:    P_ID TYPE CHAR3.         "头文字P代表画面
-          SELECT-OPTIONS:S_ID FOR GDF_ID          "用FOR后面放一个变量     除了ラジオボタン、
-                                                                        "チェックボックス外基本都可以
+     3.選択画面                                    "选择画面项目设定テキスト：ジャンプ–テキストエレメント−選択テキスト
+          PARAMETERS:    P_ID TYPE CHAR3.         "输入框 头文字P代表画面
+          SELECT-OPTIONS:S_ID FOR GDF_ID          "范围指定 FOR后面是变量 相当于范围内的数值放在一个变量里     
+                                                  "除了ラジオボタン、チェックボックス外基本都可以
 
-     初期处理
+     4.初期处理
           在选择画面还没出来之前做的初期处理
           INITIALIZATION.
                変数初期化
@@ -91,22 +91,22 @@
                初期値設定
                     P_ID = '001'.
           
-     入力チェック
+     5.入力チェック
           AT SELECTION-SCREEN.
           必須入力チェック    IF P_ID IS INITAL. MESSAGE E001(00) WITH 'エラー'. ENDIF.
           存在チェック        一般是用sql检索
           組合チェック        
 
-     主処理
+     6.主処理
           START-OF-SELECTION.
                PERFORM GET_DATA.        "执行GET_DATA这个子处理"
                PERFORM EDIT_DATA.       "编辑处理-循环，判断，编辑，计算"
                PERFORM OUT_DATA.        "数据出力-下载"
           END-OF-SELECTION.
 
-     子処理（サブルーチン）
+     7.子処理（サブルーチン）
           取数据
-               1. DB里的数据用SQL取
+               1.DB里的数据用SQL取
                2.本地文件用汎用モジュール
                3.服务器文件用汎用モジュール
                
