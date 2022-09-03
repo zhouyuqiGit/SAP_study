@@ -7,11 +7,12 @@
 *&---------------------------------------------------------------------*
 
 REPORT  ZKREUSEALV                                .
+TYPE-POOLS: slis. "类型池
 "双击REUSE_ALV_GRID_DISPLAY_LVC跳转到定义画面可以查看参数的类型
 DATA:  GDF_ID TYPE ZEID,
        GDT_ZTSTU TYPE TABLE OF ZTSTU,
        GDS_LAYOUT TYPE LVC_S_LAYO,     "レイアウト構造
-       GDW_FIELDCAT TYPE LVC_S_FCAT,   "???
+       GDW_FIELDCAT TYPE LVC_S_FCAT,   "項目カタログ構造
        GDT_FIELDCAT TYPE LVC_T_FCAT.   "項目カタログ
 
 SELECT-OPTIONS: S_ID FOR GDF_ID.       "范围指定输入框 右边是代入的变量
@@ -94,6 +95,7 @@ FORM OUT_DATA .
   GDW_FIELDCAT-EMPHASIZE = 'X'.   "强调色
   GDW_FIELDCAT-EDIT      = 'X'.   "可编辑
   GDW_FIELDCAT-OUTPUTLEN = '10'.
+  GDW_FIELDCAT-DECIMALS = '1'.    "指定小数位数
   APPEND GDW_FIELDCAT TO GDT_FIELDCAT.
 
   CLEAR: GDW_FIELDCAT.
@@ -138,6 +140,11 @@ FORM OUT_DATA .
   CALL FUNCTION 'REUSE_ALV_GRID_DISPLAY_LVC'            "ALV出力
    EXPORTING
    " I_PROGRAM_NAME                    = 'ztstu'        "单个表的时直接设置构造
+     I_CALLBACK_PROGRAM                = sy-repid       "当前的程序名
+     I_CALLBACK_PF_STATUS_SET          = 'F_SET_STA'    "ツールバー的设定
+     I_CALLBACK_USER_COMMAND           = 'F_USER_COMMAND'  "传的是子处理
+     I_CALLBACK_HTML_TOP_OF_PAGE       = 'HTML_TOP_OF_PAGE' "添加ALV的头
+     I_CALLBACK_HTML_END_OF_LIST       = 'HTML_END_OF_LIST' "添加尾
      IS_LAYOUT_LVC                     = GDS_LAYOUT     "レイアウト構造设置
      IT_FIELDCAT_LVC                   = GDT_FIELDCAT   "項目カタログ设置
    TABLES
@@ -151,3 +158,60 @@ FORM OUT_DATA .
   ENDIF.
 
 ENDFORM.                    " OUT_DATA
+
+" ALV画面操作
+FORM F_USER_COMMAND
+  USING
+    al_ucomm LIKE sy-ucomm
+  CHANGING
+    ao_sfield TYPE slis_selfield. "返回的数据
+
+  CASE al_ucomm.        "ALV画面操作后的动作 为什么用LIKE???
+    WHEN '&DATA_SAVE'.  "保存ボタンの押下
+      UPDATE ZTSTU FROM TABLE GDT_ZTSTU.
+      IF SY-SUBRC = 0.
+        COMMIT WORK.
+        MESSAGE S018(00).
+      ELSE.
+        ROLLBACK WORK.
+      ENDIF.
+    WHEN 'DOWNLOAD'.    "ダウンロードの押下
+*      PERFORM F_DOWNLOAD.
+    WHEN '&IC1'.                "鼠标双击
+      CALL TRANSACTION 'AS03'.  "跳转画面到固定資産照会
+  ENDCASE.
+
+  ao_sfield-refresh = 'X'.      "同步内表数据
+
+ENDFORM. "F_USER_COMMAND
+
+FORM F_SET_STA
+  USING
+    AL_EXTAB TYPE SLIS_T_EXTAB.
+  SET PF-STATUS 'STANDARD_FULLSCREEN'. "GUIステータス名 就是ツールバー 在WRITE出力之前描画
+ENDFORM. "F_SET_STA
+
+FORM HTML_TOP_OF_PAGE
+  USING DOCUMENT TYPE REF TO CL_DD_DOCUMENT.
+
+  DATA: TEXT TYPE SDYDO_TEXT_ELEMENT.
+  TEXT = 'SAP_TOP_OF_PAGE_TEST'.
+  CALL METHOD DOCUMENT->ADD_TEXT
+    EXPORTING
+      TEXT = TEXT
+      SAP_STYLE = 'HEADING'.
+
+ENDFORM. "HTML_TOP_OF_PAGE
+
+FORM HTML_END_OF_LIST
+  USING END TYPE REF TO CL_DD_DOCUMENT.
+ 
+  DATA: LS_TEXT TYPE SDYDO_TEXT_ELEMENT.
+
+  LS_TEXT = 'SAP_END_OF_LIST_TEST'.
+  CALL METHOD END->ADD_TEXT
+    EXPORTING
+      TEXT         = LS_TEXT
+      SAP_EMPHASIS = 'STRONG'.
+
+ENDFORM. "HTML_END_OF_LIST
